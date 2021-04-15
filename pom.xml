@@ -14,7 +14,7 @@
 	<name>app-dev-ws</name>
 	<description>Demo REST</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>11:</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -57,5 +57,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
