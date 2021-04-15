@@ -8,10 +8,13 @@ import com.appsdev.app.ws.appdevws.shared.dto.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 public class UserServiceImplement implements UserService {
@@ -35,12 +38,11 @@ public class UserServiceImplement implements UserService {
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(user, userEntity);
 
-        //to encrypt password before store it to database
-        userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-
         //generate userId
         String publicUserId = utils.generateUserId(30);
         userEntity.setUserId(publicUserId);
+        //to encrypt password before store it to database
+        userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
 
@@ -51,8 +53,13 @@ public class UserServiceImplement implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        // TODO Auto-generated method stub
-        return null;
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserEntity userEntity =  userRepository.findUserEntitiesByEmail(email);
+
+        if(userEntity == null){
+            throw new UsernameNotFoundException(email);
+        }
+
+        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
     }
 }

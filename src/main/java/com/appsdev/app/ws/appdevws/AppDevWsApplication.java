@@ -13,7 +13,6 @@ public class AppDevWsApplication {
 	}
 
 
-	//used to declare class
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder(){
 		return new BCryptPasswordEncoder();

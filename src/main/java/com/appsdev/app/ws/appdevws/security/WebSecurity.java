@@ -1,13 +1,13 @@
 package com.appsdev.app.ws.appdevws.security;
 
+import com.appsdev.app.ws.appdevws.service.UserService;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
@@ -23,9 +23,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception{
-        httpSecurity.csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/users")
-                .permitAll().anyRequest().authenticated();
+        httpSecurity.csrf().disable()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST, SecurityConstants.SING_UP_URL)
+                .permitAll()
+                .anyRequest().authenticated();
     }
 
     @Override
