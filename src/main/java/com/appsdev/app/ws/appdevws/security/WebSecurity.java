@@ -31,7 +31,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated().and().addFilter(getAuthenticationFilter())
                 .addFilter(new AuthorizationFilter(authenticationManager()))
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS); //in order not to create http session and cashed cookies
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        //in order not to create http session and cashed cookies, STATELESS is the more strict option
     }
 
     @Override
