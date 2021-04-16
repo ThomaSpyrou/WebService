@@ -1,13 +1,12 @@
 package com.appsdev.app.ws.appdevws.service.implementation;
 
-import com.appsdev.app.ws.appdevws.UserRepository;
+import com.appsdev.app.ws.appdevws.io.repositories.UserRepository;
 import com.appsdev.app.ws.appdevws.io.entity.UserEntity;
 import com.appsdev.app.ws.appdevws.service.UserService;
 import com.appsdev.app.ws.appdevws.shared.dto.UserDTO;
 import com.appsdev.app.ws.appdevws.shared.dto.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -61,5 +60,21 @@ public class UserServiceImplement implements UserService {
         }
 
         return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
+    }
+
+    @Override
+    public UserDTO getUser(String email){
+        UserEntity userEntity = userRepository.findUserEntitiesByEmail(email);
+
+        if(userEntity == null){
+            throw new UsernameNotFoundException(email);
+        }
+
+        UserDTO returnValue = new UserDTO();
+        BeanUtils.copyProperties(userEntity, returnValue);
+
+        return returnValue;
+
+
     }
 }

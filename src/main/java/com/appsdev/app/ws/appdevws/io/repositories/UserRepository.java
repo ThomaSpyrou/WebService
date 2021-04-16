@@ -1,4 +1,4 @@
-package com.appsdev.app.ws.appdevws;
+package com.appsdev.app.ws.appdevws.io.repositories;
 
 import com.appsdev.app.ws.appdevws.io.entity.UserEntity;
 import org.springframework.data.repository.CrudRepository;
