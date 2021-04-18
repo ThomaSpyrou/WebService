@@ -6,6 +6,7 @@ import com.appsdev.app.ws.appdevws.service.UserService;
 import com.appsdev.app.ws.appdevws.shared.dto.UserDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,7 +16,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping(path = "/{userId}")
+    @GetMapping(path = "/{userId}",
+            produces = {MediaType.APPLICATION_XML_VALUE ,MediaType.APPLICATION_JSON_VALUE})
+            //json is the default, if it is defined the order matters
     public UserRest getUser(@PathVariable String userId){
 
         UserRest returnValue = new UserRest();
