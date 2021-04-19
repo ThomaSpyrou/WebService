@@ -1,7 +1,9 @@
 package com.appsdev.app.ws.appdevws.service.implementation;
 
+import com.appsdev.app.ws.appdevws.exceptions.UserServiceException;
 import com.appsdev.app.ws.appdevws.io.repositories.UserRepository;
 import com.appsdev.app.ws.appdevws.io.entity.UserEntity;
+import com.appsdev.app.ws.appdevws.model.response.ErrorMessages;
 import com.appsdev.app.ws.appdevws.service.UserService;
 import com.appsdev.app.ws.appdevws.shared.dto.UserDTO;
 import com.appsdev.app.ws.appdevws.shared.dto.Utils;
@@ -89,6 +91,23 @@ public class UserServiceImplement implements UserService {
         }
 
         BeanUtils.copyProperties(userEntity, returnValue);
+
+        return returnValue;
+    }
+
+    @Override
+    public UserDTO updateUser(String userId, UserDTO userDTO) {
+        UserDTO returnValue = new UserDTO();
+        UserEntity userEntity = userRepository.findUserEntityByUserId(userId);
+
+        if(userEntity == null){
+            throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        }
+
+        userEntity.setFirstName(userDTO.getFirstName());
+        userEntity.setLastName(userDTO.getLastName());
+        UserEntity updatedUser = userRepository.save(userEntity);
+        BeanUtils.copyProperties(updatedUser, returnValue);
 
         return returnValue;
     }

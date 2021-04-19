@@ -1,5 +1,6 @@
 package com.appsdev.app.ws.appdevws.service;
 
+import com.appsdev.app.ws.appdevws.exceptions.UserServiceException;
 import com.appsdev.app.ws.appdevws.shared.dto.UserDTO;
 import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,4 +10,5 @@ public interface UserService extends UserDetailsService {
     UserDTO createUser(UserDTO userDTO);
     UserDTO getUser(String email);
     UserDTO getUserByUserId(String userId);
+    UserDTO updateUser(String userId, UserDTO userDTO);
 }
