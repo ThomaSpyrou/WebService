@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "api/users")
 public class UserController {
@@ -70,5 +73,22 @@ public class UserController {
         returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
 
         return returnValue;
+    }
+
+    //use pagination in order to select a limit number of record per page
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public List<UserRest> getAllUser(@RequestParam(value = "pageID", defaultValue = "0") int page,
+                                     @RequestParam(value = "pageLimit", defaultValue = "50") int pageLimit) throws Exception{
+        List<UserRest> returnListOfUsers = new ArrayList<>();
+
+        List<UserDTO> listOfUsers = userService.getAllUsers(page, pageLimit);
+
+        for(UserDTO user: listOfUsers){
+            UserRest userModel = new UserRest();
+            BeanUtils.copyProperties(user, userModel);
+            returnListOfUsers.add(userModel);
+        }
+
+        return returnListOfUsers;
     }
 }
