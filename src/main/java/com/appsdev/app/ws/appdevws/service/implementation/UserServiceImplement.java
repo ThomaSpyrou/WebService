@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -87,7 +86,7 @@ public class UserServiceImplement implements UserService {
         UserEntity userEntity = userRepository.findUserEntityByUserId(userId);
 
         if(userEntity == null){
-            throw new UsernameNotFoundException(userId);
+            throw new UsernameNotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage() + userId);
         }
 
         BeanUtils.copyProperties(userEntity, returnValue);
@@ -111,4 +110,17 @@ public class UserServiceImplement implements UserService {
 
         return returnValue;
     }
+
+    @Override
+    public void deleteUserById(String userId) {
+        UserDTO returnValue = new UserDTO();
+        UserEntity userEntity = userRepository.findUserEntityByUserId(userId);
+
+        if(userEntity == null){
+            throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        }
+
+        userRepository.delete(userEntity);
+    }
+
 }

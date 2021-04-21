@@ -2,8 +2,7 @@ package com.appsdev.app.ws.appdevws.controller;
 
 import com.appsdev.app.ws.appdevws.exceptions.UserServiceException;
 import com.appsdev.app.ws.appdevws.model.UserDetailsRequestModel;
-import com.appsdev.app.ws.appdevws.model.response.ErrorMessages;
-import com.appsdev.app.ws.appdevws.model.response.UserRest;
+import com.appsdev.app.ws.appdevws.model.response.*;
 import com.appsdev.app.ws.appdevws.service.UserService;
 import com.appsdev.app.ws.appdevws.shared.dto.UserDTO;
 import org.springframework.beans.BeanUtils;
@@ -62,8 +61,14 @@ public class UserController {
         return returnValue;
     }
 
-    @DeleteMapping
-    public String deleteUser(){
-        return "Delete User";
+    @DeleteMapping(path = "/{userId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public OperationStatusModel deleteUser(@PathVariable String userId) throws Exception{
+        OperationStatusModel returnValue = new OperationStatusModel();
+        userService.deleteUserById(userId);
+        returnValue.setOperationName(RequestOperationName.DELETE.name());
+        returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+
+        return returnValue;
     }
 }
