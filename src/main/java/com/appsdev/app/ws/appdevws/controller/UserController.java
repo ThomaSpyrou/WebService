@@ -5,6 +5,7 @@ import com.appsdev.app.ws.appdevws.model.UserDetailsRequestModel;
 import com.appsdev.app.ws.appdevws.model.response.*;
 import com.appsdev.app.ws.appdevws.service.UserService;
 import com.appsdev.app.ws.appdevws.shared.dto.UserDTO;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -41,10 +42,13 @@ public class UserController {
         }
 
         UserRest returnValue = new UserRest();
-        UserDTO userDto = new UserDTO();
-        BeanUtils.copyProperties(userDetails, userDto); //copies propertied from source objects to target objects
-        UserDTO createdUser = userService.createUser(userDto);
-        BeanUtils.copyProperties(createdUser, returnValue);
+        //UserDTO userDTO = new UserDTO();
+        //BeanUtils.copyProperties(userDetails, userDto); //copies propertied from source objects to target objects
+        //BeanUtils should not be used for multiple objects-lists
+        ModelMapper modelMapper = new ModelMapper();
+        UserDTO userDTO = modelMapper.map(userDetails, UserDTO.class);
+        UserDTO createdUser = userService.createUser(userDTO);
+        returnValue = modelMapper.map(createdUser, UserRest.class);
 
         return returnValue;
     }

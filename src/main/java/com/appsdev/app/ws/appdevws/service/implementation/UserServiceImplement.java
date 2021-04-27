@@ -6,8 +6,10 @@ import com.appsdev.app.ws.appdevws.io.entity.UserEntity;
 import com.appsdev.app.ws.appdevws.model.response.ErrorMessages;
 import com.appsdev.app.ws.appdevws.model.response.UserRest;
 import com.appsdev.app.ws.appdevws.service.UserService;
+import com.appsdev.app.ws.appdevws.shared.dto.AddressDTO;
 import com.appsdev.app.ws.appdevws.shared.dto.UserDTO;
 import com.appsdev.app.ws.appdevws.shared.dto.Utils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
@@ -45,9 +47,17 @@ public class UserServiceImplement implements UserService {
             throw new RuntimeException("User already exists");
         }
 
-        UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(user, userEntity);
+        for(int index=0; index<user.getAddresses().size();index++){
+            AddressDTO addressDTO = user.getAddresses().get(index);
+            addressDTO.setUserDetails(user);
+            addressDTO.setAddressId(utils.generateAddressId(30));
+            user.getAddresses().set(index, addressDTO);
+            System.out.println(addressDTO.getAddressId());
+        }
 
+        //BeanUtils.copyProperties(user, userEntity);
+        ModelMapper modelMapper = new ModelMapper();
+        UserEntity userEntity = modelMapper.map(user, UserEntity.class);
         //generate userId
         String publicUserId = utils.generateUserId(30);
         userEntity.setUserId(publicUserId);
@@ -56,8 +66,8 @@ public class UserServiceImplement implements UserService {
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
 
-        UserDTO returnValue = new UserDTO();
-        BeanUtils.copyProperties(storedUserDetails, returnValue);
+       // BeanUtils.copyProperties(storedUserDetails, returnValue);
+        UserDTO returnValue = modelMapper.map(storedUserDetails, UserDTO.class);
 
         return returnValue;
     }
