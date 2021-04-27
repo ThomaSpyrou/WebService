@@ -4,7 +4,6 @@ import com.appsdev.app.ws.appdevws.exceptions.UserServiceException;
 import com.appsdev.app.ws.appdevws.io.repositories.UserRepository;
 import com.appsdev.app.ws.appdevws.io.entity.UserEntity;
 import com.appsdev.app.ws.appdevws.model.response.ErrorMessages;
-import com.appsdev.app.ws.appdevws.model.response.UserRest;
 import com.appsdev.app.ws.appdevws.service.UserService;
 import com.appsdev.app.ws.appdevws.shared.dto.AddressDTO;
 import com.appsdev.app.ws.appdevws.shared.dto.UserDTO;
@@ -12,7 +11,6 @@ import com.appsdev.app.ws.appdevws.shared.dto.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,12 +19,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class UserServiceImplement implements UserService {
