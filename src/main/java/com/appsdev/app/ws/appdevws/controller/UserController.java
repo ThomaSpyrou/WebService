@@ -3,14 +3,17 @@ package com.appsdev.app.ws.appdevws.controller;
 import com.appsdev.app.ws.appdevws.exceptions.UserServiceException;
 import com.appsdev.app.ws.appdevws.model.UserDetailsRequestModel;
 import com.appsdev.app.ws.appdevws.model.response.*;
+import com.appsdev.app.ws.appdevws.service.AddressService;
 import com.appsdev.app.ws.appdevws.service.UserService;
+import com.appsdev.app.ws.appdevws.shared.dto.AddressDTO;
 import com.appsdev.app.ws.appdevws.shared.dto.UserDTO;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    AddressService addressService;
 
     @GetMapping(path = "/{userId}",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -95,4 +101,19 @@ public class UserController {
 
         return returnListOfUsers;
     }
+
+    @GetMapping(path = "/{userId}/addresses",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public List<AddressesRest> getListOfAddresses(@PathVariable String userId) throws Exception{
+        List<AddressesRest> returnList = new ArrayList<>();
+        List<AddressDTO> addressDTOList = addressService.getUserAddresses(userId);
+
+        ModelMapper modelMapper = new ModelMapper();
+        Type listType = new TypeToken<List<AddressesRest>>() {}.getType();
+        returnList = modelMapper.map(addressDTOList, listType);
+
+
+        return returnList;
+    }
 }
+
