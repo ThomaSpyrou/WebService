@@ -38,4 +38,18 @@ public class AddressServiceImplementation implements AddressService {
 
         return addressDTOList;
     }
+
+    @Override
+    public AddressDTO getUserAddress(String addressId) {
+        AddressDTO returnValue = new AddressDTO();
+        AddressEntity addressEntity = addressRepository.findByAddressId(addressId);
+
+        if(addressEntity == null){
+           throw new RuntimeException("Address does not exist");
+        }
+
+        returnValue = new ModelMapper().map(addressEntity, AddressDTO.class);
+
+        return returnValue;
+    }
 }

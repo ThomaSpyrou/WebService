@@ -112,8 +112,16 @@ public class UserController {
         Type listType = new TypeToken<List<AddressesRest>>() {}.getType();
         returnList = modelMapper.map(addressDTOList, listType);
 
-
         return returnList;
     }
-}
 
+    @GetMapping(path = "/{userId}/addresses/{addressId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public AddressesRest getUserAddress(@PathVariable String addressId) throws Exception{
+        AddressDTO addressDTO = addressService.getUserAddress(addressId);
+
+        ModelMapper modelMapper = new ModelMapper();
+
+        return modelMapper.map(addressDTO, AddressesRest.class);
+    }
+}
