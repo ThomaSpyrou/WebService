@@ -2,7 +2,7 @@ package com.appsdev.app.ws.appdevws.model.response;
 
 import org.springframework.hateoas.RepresentationModel;
 
-public class AddressesRest extends RepresentationModel<AddressesRest> {
+public class AddressesRest extends RepresentationModel<AddressesRest> {// because i am using EntityModel no need to extend
     private String addressId;
     private String city;
     private String country;

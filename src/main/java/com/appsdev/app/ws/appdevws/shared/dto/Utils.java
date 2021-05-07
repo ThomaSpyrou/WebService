@@ -1,5 +1,5 @@
 package com.appsdev.app.ws.appdevws.shared.dto;
-//used to generate used id which will be send back in frontend
+//used to generate id which will be send back in frontend
 
 import org.springframework.stereotype.Component;
 import java.security.SecureRandom;
