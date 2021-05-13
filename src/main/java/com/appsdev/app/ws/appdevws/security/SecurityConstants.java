@@ -8,6 +8,7 @@ public class SecurityConstants {
     public static final String TOKEN_PREFIX = "Bearer"; //authorization header
     public static final String HEADER_STRING = "Authorization";
     public static final String SING_UP_URL = "/api/users";
+    public static final String VERIFICATION_EMAIL_URL = "/api/email-verification";
 
     public static String getTokenSecret(){
         AppProperties appProperties = (AppProperties) SpringApplicationContext.getBean("AppProperties");

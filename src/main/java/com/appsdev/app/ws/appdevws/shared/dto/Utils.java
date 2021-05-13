@@ -1,8 +1,13 @@
 package com.appsdev.app.ws.appdevws.shared.dto;
 //used to generate id which will be send back in frontend
 
+import com.appsdev.app.ws.appdevws.security.SecurityConstants;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
 import java.security.SecureRandom;
+import java.util.Date;
 import java.util.Random;
 
 @Component
@@ -23,5 +28,26 @@ public class Utils {
         }
 
         return new String(returnValue);
+    }
+
+    public static boolean hasTokenExpired(String token){
+        //decrypt the token
+        Claims claims = Jwts.parser()
+                .setSigningKey(SecurityConstants.getTokenSecret())
+                .parseClaimsJws(token).getBody();
+
+        Date tokenExpirationDate = claims.getExpiration();
+        Date todayDate = new Date();
+
+        return tokenExpirationDate.before(todayDate);
+    }
+
+    public String generateEmailVerificationToken(String userID){
+        //token to be returned
+        return Jwts.builder()
+                .setSubject(userID)
+                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret())
+                .compact();
     }
 }

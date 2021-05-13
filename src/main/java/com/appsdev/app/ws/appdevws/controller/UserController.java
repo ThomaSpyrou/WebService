@@ -7,7 +7,6 @@ import com.appsdev.app.ws.appdevws.service.AddressService;
 import com.appsdev.app.ws.appdevws.service.UserService;
 import com.appsdev.app.ws.appdevws.shared.dto.AddressDTO;
 import com.appsdev.app.ws.appdevws.shared.dto.UserDTO;
-import org.hibernate.EntityMode;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.*;
 import org.springframework.beans.BeanUtils;
@@ -18,8 +17,6 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import javax.swing.text.html.parser.Entity;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -170,5 +167,23 @@ public class UserController {
 //        returnValue.add(selfLink);
 
         return EntityModel.of(returnValue, Arrays.asList(userLink, userAddressesLink, selfLink));
+    }
+
+
+    @GetMapping(path = "/email-verification", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public OperationStatusModel verifyEmailToken(@RequestParam(value = "token") String token){
+        OperationStatusModel returnValue = new OperationStatusModel();
+        returnValue.setOperationName(RequestOperationName.VERIFY_EMAIL.name());
+
+        boolean isVerified = userService.verifyEmailToken(token);
+
+        if(isVerified){
+            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        }
+        else{
+            returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+        }
+
+        return returnValue;
     }
 }

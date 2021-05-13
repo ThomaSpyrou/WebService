@@ -1,6 +1,6 @@
 package com.appsdev.app.ws.appdevws.security;
 
-import com.appsdev.app.ws.appdevws.service.UserService;
+
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,6 +27,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SING_UP_URL)
+                .permitAll() // the public methods does not need authorization header
+                .antMatchers(HttpMethod.GET, SecurityConstants.VERIFICATION_EMAIL_URL)
                 .permitAll()
                 .anyRequest().authenticated().and().addFilter(getAuthenticationFilter())
                 .addFilter(new AuthorizationFilter(authenticationManager()))
