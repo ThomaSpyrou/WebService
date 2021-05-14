@@ -6,6 +6,7 @@ import com.appsdev.app.ws.appdevws.io.entity.UserEntity;
 import com.appsdev.app.ws.appdevws.model.response.ErrorMessages;
 import com.appsdev.app.ws.appdevws.service.UserService;
 import com.appsdev.app.ws.appdevws.shared.dto.AddressDTO;
+import com.appsdev.app.ws.appdevws.shared.dto.AmazonSES;
 import com.appsdev.app.ws.appdevws.shared.dto.UserDTO;
 import com.appsdev.app.ws.appdevws.shared.dto.Utils;
 import org.modelmapper.ModelMapper;
@@ -63,8 +64,12 @@ public class UserServiceImplement implements UserService {
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
 
+
+
        // BeanUtils.copyProperties(storedUserDetails, returnValue);
         UserDTO returnValue = modelMapper.map(storedUserDetails, UserDTO.class);
+        //send email from aws, aws not configure
+        new AmazonSES().verifyEmail(returnValue);
 
         return returnValue;
     }
