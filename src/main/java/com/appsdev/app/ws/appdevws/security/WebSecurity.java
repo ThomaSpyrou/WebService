@@ -30,6 +30,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .permitAll() // the public methods does not need authorization header
                 .antMatchers(HttpMethod.GET, SecurityConstants.VERIFICATION_EMAIL_URL)
                 .permitAll()
+                .antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_REQUEST_URL)
+                .permitAll()
+                .antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_URL)
+                .permitAll()
                 .anyRequest().authenticated().and().addFilter(getAuthenticationFilter())
                 .addFilter(new AuthorizationFilter(authenticationManager()))
                 .sessionManagement()

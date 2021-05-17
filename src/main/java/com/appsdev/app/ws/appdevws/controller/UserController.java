@@ -1,6 +1,8 @@
 package com.appsdev.app.ws.appdevws.controller;
 
 import com.appsdev.app.ws.appdevws.exceptions.UserServiceException;
+import com.appsdev.app.ws.appdevws.model.PasswordResetModel;
+import com.appsdev.app.ws.appdevws.model.PasswordResetRequestModel;
 import com.appsdev.app.ws.appdevws.model.UserDetailsRequestModel;
 import com.appsdev.app.ws.appdevws.model.response.*;
 import com.appsdev.app.ws.appdevws.service.AddressService;
@@ -182,6 +184,41 @@ public class UserController {
         }
         else{
             returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+        }
+
+        return returnValue;
+    }
+
+    @PostMapping(path = "/passwordResetRequest", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public OperationStatusModel requestResetPassword(@RequestBody PasswordResetRequestModel passwordResetRequestModel){
+        OperationStatusModel returnValue = new OperationStatusModel();
+
+        boolean operationResult = userService.requestPasswordReset(passwordResetRequestModel.getEmailAddress());
+
+        returnValue.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
+        returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+
+        if(operationResult){
+            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        }
+
+        return returnValue;
+    }
+
+    @PostMapping(name = "/passwordReset", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public OperationStatusModel resetPassword(@RequestBody PasswordResetModel passwordResetModel){
+        OperationStatusModel returnValue = new OperationStatusModel();
+
+        boolean operationResult = userService.resetPassword(
+                passwordResetModel.getToken(),
+                passwordResetModel.getPassword());
+
+        returnValue.setOperationName(RequestOperationName.PASSWORD_RESET.name());
+        returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+
+        if (operationResult){
+            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
         }
 
         return returnValue;
