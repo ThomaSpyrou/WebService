@@ -8,6 +8,7 @@ class AppDevWsApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
