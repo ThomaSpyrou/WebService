@@ -4,6 +4,7 @@ package com.appsdev.app.ws.appdevws.shared.dto;
 import com.appsdev.app.ws.appdevws.security.SecurityConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
 import java.security.SecureRandom;
@@ -39,15 +40,23 @@ public class Utils {
     }
 
     public static boolean hasTokenExpired(String token){
-        //decrypt the token
-        Claims claims = Jwts.parser()
-                .setSigningKey(SecurityConstants.getTokenSecret())
-                .parseClaimsJws(token).getBody();
+        boolean returnValue = false;
 
-        Date tokenExpirationDate = claims.getExpiration();
-        Date todayDate = new Date();
+        try {
+            //decrypt the token
+            Claims claims = Jwts.parser()
+                    .setSigningKey(SecurityConstants.getTokenSecret())
+                    .parseClaimsJws(token).getBody();
 
-        return tokenExpirationDate.before(todayDate);
+            Date tokenExpirationDate = claims.getExpiration();
+            Date todayDate = new Date();
+            returnValue = tokenExpirationDate.before(todayDate);
+        }
+        catch (MalformedJwtException malformedJwtException){
+            returnValue = true;
+        }
+
+        return returnValue;
     }
 
     public String generateEmailVerificationToken(String userID){
