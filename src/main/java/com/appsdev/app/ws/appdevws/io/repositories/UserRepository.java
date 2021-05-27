@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -18,6 +19,7 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
     UserEntity findUserEntityByUserId(String userId);
     UserEntity findUserEntityByEmailVerificationToken(String token);
 
+    //native queries
     @Query(value = "select * from users where email_verification_status = 'true'",
             nativeQuery = true,
             countQuery = "select count(*) from users where email_verification_status = 'true'")
@@ -43,4 +45,10 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
             nativeQuery = true)
     void updateUserEmailVerificationStatus(@Param("emailVerificationStatus") boolean emailVerificationStatus, @Param("userID") String userID);
 
+    //JPQL
+    @Query("select user from UserEntity user where user.userId = :userID")
+    UserEntity findUserEntityByUserId_v2(@Param("userID") String userID);
+
+    @Query("select user.firstName, user.lastName from UserEntity user where user.userId = :userID")
+    List<Object[]> getUserEntitiesFullNameById(@Param("userID") String userID);
 }

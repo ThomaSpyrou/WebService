@@ -95,5 +95,20 @@ public class UserRepositoryTest {
 
         assertEquals(storedEmailVerificationStatus, emailVerificationStatus);
     }
+
+    @Test
+    final void testFindUserEntityByUserId_v2(){
+        UserEntity user = userRepository.findUserEntityByUserId_v2(userId);
+
+        assertNotNull(user);
+        assertEquals(user.getUserId(), userId);
+    }
+
+    @Test
+    final void testGetUserEntitiesFullNameById(){
+        List<Object[]> users = userRepository.getUserEntitiesFullNameById(userId);
+
+        assertNotNull(users);
+    }
 }
 
