@@ -1,16 +1,12 @@
 package com.appsdev.app.ws.appdevws.io.entity;
 
 
-import java.io.Serializable;
-import java.util.List;
+import org.hibernate.mapping.Join;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+import javax.persistence.*;
 
 @Entity
 @Table(name="users")
@@ -44,6 +40,13 @@ public class UserEntity implements Serializable {
 
     @OneToMany(mappedBy="userDetails", cascade=CascadeType.ALL)
     private List<AddressEntity> addresses;
+
+    //roles
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER) //not to delete the role just the user
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name="users_id", referencedColumnName="id"),
+            inverseJoinColumns=@JoinColumn(name="roled_id", referencedColumnName="id"))
+    private Collection<RoleEntity> roles;
 
     public long getId() {
         return id;
