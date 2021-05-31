@@ -6,6 +6,7 @@ import com.appsdev.app.ws.appdevws.io.repositories.PasswordResetTokenRepository;
 import com.appsdev.app.ws.appdevws.io.repositories.UserRepository;
 import com.appsdev.app.ws.appdevws.io.entity.UserEntity;
 import com.appsdev.app.ws.appdevws.model.response.ErrorMessages;
+import com.appsdev.app.ws.appdevws.security.UserPrincipal;
 import com.appsdev.app.ws.appdevws.service.UserService;
 import com.appsdev.app.ws.appdevws.shared.dto.AddressDTO;
 import com.appsdev.app.ws.appdevws.shared.dto.AmazonSES;
@@ -91,10 +92,12 @@ public class UserServiceImplement implements UserService {
             throw new UsernameNotFoundException(email);
         }
 
+        return new UserPrincipal(userEntity);
+
         //return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
-        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(),
-                userEntity.getEmailVerificationStatus(),
-                true, true, true, new ArrayList<>());
+//        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(),
+//                userEntity.getEmailVerificationStatus(),
+//                true, true, true, new ArrayList<>());
     }
 
     @Override
