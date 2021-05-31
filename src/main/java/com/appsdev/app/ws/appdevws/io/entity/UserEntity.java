@@ -120,6 +120,11 @@ public class UserEntity implements Serializable {
         this.addresses = addresses;
     }
 
+    public Collection<RoleEntity> getRoles() {
+        return roles;
+    }
 
-
+    public void setRoles(Collection<RoleEntity> roles) {
+        this.roles = roles;
+    }
 }
